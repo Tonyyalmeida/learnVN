@@ -22,7 +22,25 @@ class store {
   this.listing.push(new Listing (newListing.target.value));
   newListing.target.value = "";
 }
-};}
+}
+@observable sessionList = [];
+@action.bound initialLize (a) {
+  const newState = this.listing;
+  this.sessionList = newState; // to be completed (sample)
+}
+@action.bound handleDone (a) {
+  const newState = this.listing.filter( (item) => item.name1 !== a)
+  this.listing = newState;
+}
+//add mit Push
+//Remove mit Filter
+//checkAddOrRemove (who should carry the state? give it to MobX)
+
+
+
+
+
+;}
 
 
 class Listing {
