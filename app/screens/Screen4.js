@@ -10,7 +10,7 @@ export default class RowActions1 extends Component {
     this.state = {
       renderFull : true,
       en : "Hallo",
-      vn: "Xin Chao"
+      vn: this.props.count
     };
   }
 renderHalf() {
