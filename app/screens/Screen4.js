@@ -9,15 +9,25 @@ export default class RowActions1 extends Component {
     super(props);
     this.state = {
       renderFull : true,
-      en : "Hallo",
-      vn: this.props.count
+      sessionWordList:  [
+    {id: "1", name1: "Nam", name2: "The Bills"},
+    {id: "2", name1: "Paasdsaying", name2: "Zweites Wort"},
+    {id: "3", name1: "Paasdqsaying", name2: "The Bilqelsads"},
+    {id: "4", name1: "Paasdqwsaying", name2: "TDirrtesqwewqlsads"},
+    {id: "6", name1: "PaHahasausang", name2: "The Billsads"},
+    {id: "7", name1: "Paasdwesaying", name2: "The Billsweqads"},
+    {id: "8", name1: "Psdsdsdsg", name2: "Lasuhussdfs"},
+    {id: "9", name1: "JWEJDsn", name2: "The Billsqads"},     
+    {id: "10", name1: "Paasdqsaying", name2: "The Bilewlsads"},   
+    {id: "11", name1: "Paasdsasying", name2: "Looasjdw"}],
+    currentIndex: 0
     };
   }
 renderHalf() {
   return (
      <View>
 <Text>
-{this.state.en}
+{this.state.sessionWordList[this.state.currentIndex].name1}
 </Text>
 <Button 
 onPress={() => {this.setState({renderFull : !this.state.renderFull})}}
@@ -29,14 +39,17 @@ renderFull() {
   return (
      <View>
      <Text>
-{this.state.en}
+{this.state.sessionWordList[this.state.currentIndex].name1}
 </Text>
 <Text>
-{this.state.vn}
+{this.state.sessionWordList[this.state.currentIndex].name2}
 </Text>
 <Button 
-onPress={() => {this.setState({renderFull : !this.state.renderFull})}}
-title="Next"></Button>
+onPress={() => {this.setState({renderFull : !this.state.renderFull, currentIndex: this.state.currentIndex + 1})}}
+title="Yes"></Button>
+<Button 
+onPress={() => {Alert.alert("hi")}}
+title="No"></Button>
       </View> 
   )
 }
