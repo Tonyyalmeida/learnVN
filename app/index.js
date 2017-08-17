@@ -7,9 +7,10 @@ import Screen4 from './screens/Screen4';
 import Screen5 from './screens/Screen5';
 import Screen6 from './screens/Screen6';
 import Provider from './stores/MobxRnnProvider';
-import Store from './stores/store';
+import Store from './stores/index';
 
 export default () => {
+//  const Stores = new Store ();
   Navigation.registerComponent('Screen1', () => Screen1, Store, Provider);
   Navigation.registerComponent('Screen2', () => Screen2, Store, Provider);
   Navigation.registerComponent('Screen3', () => Screen3, Store, Provider);

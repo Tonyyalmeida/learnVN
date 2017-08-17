@@ -23,23 +23,16 @@ import {
 import { Button, List, ListItem, FormLabel, FormInput, Icon } from 'react-native-elements';
 import { Provider } from 'mobx-react';
 
-@inject("store") @observer
+@inject("generalWordStore") @observer
 class HI extends Component {
    constructor(props) {
     super(props);
     this.state = { 
-      list: [
-        {id: "1", name1: "Paying", name2: "The Bills"},
-        {id: "2", name1: "Paasdswaying", name2: "The Biqwellsads"},
-        {id: "3", name1: "Paasdsqaying", name2: "The Biqwellsads"},
-        {id: "4", name1: "Paasdseeaying", name2: "The Billsads"},
-        {id: "6", name1: "Paasdsqqwaying", name2: "The Biqwellsads"},
-        {id: "7", name1: "Paasdsawqying", name2: "The Biqwewqllsads"},
-        {id: "8", name1: "Paasdsqaying", name2: "The Biwqeqwllsads"},
-        {id: "9", name1: "Paeqasdsaying", name2: "The Billsads"},
-        {id: "10", name1: "Paasdsaying", name2: "The Biwqewqllsads"},   
-        {id: "11", name1: "Paasdseqwaying", name2: "The Bqweillsads"}],
+      list: []     
 }};
+componentDidMount() {
+console.log('this is where i should call a function in store to call API and set listing')
+}
 handlePress = (a,b,c,d) => {
 this.props.navigator.push({
   screen: 'Screen3', // unique ID registered with Navigation.registerScreen
@@ -56,7 +49,7 @@ this.props.navigator.push({
 render() {
   return(
       <FlatList
-      data={this.props.store.listing}
+      data={this.props.generalWordStore.listing}
       keyExtractor = {(item) => item.id}
       renderItem={ 
         ({item}) => (
@@ -66,7 +59,7 @@ render() {
 }
 
 let ListItemComponent = props => {
-return (<TouchableOpacity onPress={ () => props.moreMe(props.item.name1, props.item.id, props.index, props.item.name2)}><ListItem title={props.item.name1} subtitle={props.item.name2} ></ListItem></TouchableOpacity>
+return (<TouchableOpacity onPress={ () => props.moreMe(props.item.name1, props.item.id, props.index, props.item.name2)}><ListItem badge={{ value: props.item.status, textStyle: { color: 'orange' }}} title={props.item.name1} subtitle={props.item.name2} ></ListItem></TouchableOpacity>
 )
 }
 
