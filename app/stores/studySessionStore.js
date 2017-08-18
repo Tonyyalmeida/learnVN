@@ -43,13 +43,13 @@ class studySessionStore {
 };
 
 
-// class Listing {
-//   @observable name1;
-//   @observable id;
-//   constructor(value, id) {
-//     this.name1 = value;
-//     this.id = id ? id : Date.now();
-//   }
-// }
+export class Listing {
+  @observable name1;
+  @observable id;
+  constructor(value, id) {
+    this.name1 = value;
+    this.id = id ? id : Date.now();
+  }
+}
 
 export default studySessionStore;

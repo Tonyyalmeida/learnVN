@@ -1,7 +1,7 @@
 import generalWordStore from "./generalWordStore"
-import studySessionStore from "./studySessionStore"
+import { default as Hi } from "./studySessionStore"
 
 export default {
   generalWordStore: new generalWordStore(),
-  studySessionStore: new studySessionStore()
+  studySessionStore: new Hi()
 }

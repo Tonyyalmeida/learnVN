@@ -53,14 +53,15 @@ title="Press me"></Button>
 }
 renderFull() {
   return (
-     <View>
-       <Text>
+     <View style={{flex: 1, backgroundColor: '#374046', flexDirection: 'column'}}>
+      <View style={styles.wordContainer}><Text>
             {this.state.sessionWordList[this.state.currentIndex].name1}
-      </Text>
+            </Text>
       <Text>
             {this.state.sessionWordList[this.state.currentIndex].name2}
       </Text>
-      <View style={styles.buttonContainer}>
+     </View> 
+     <View style={styles.buttonContainer}>
       <View style={styles.button}>
           <Button color='#dd4b39' onPress={() => {this.setState({renderFull : !this.state.renderFull, currentIndex: this.state.currentIndex + 1})}}
               title="Yes!">
@@ -70,10 +71,9 @@ renderFull() {
           <Button color='#dd4b39'onPress={this.showToastComponent} title="No!">
           </Button>      
       </View> 
-      </View> 
-
-
-    </View> 
+     </View> 
+     <View style={styles.statisticsContainer}></View>
+    </View>
   )
 }
 
@@ -88,53 +88,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white'
   },
-  rowContent: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#eeeeee'
-  },
-  rowIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#73d4e3',
-    margin: 20
-  },
-  rowTitle: {
-    fontWeight: 'bold',
-    fontSize: 20
-  },
-  rowSubtitle: {
-    fontSize: 18,
-    color: 'gray'
-  },
   button: {
-    width: 200
+    width: 150,
+    backgroundColor: '#1EAAF1',
   },
   buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: "space-around",
+    alignItems: 'center',
+    flex: 2,
+    backgroundColor: '#73d4e3',
   },
-  buttonImage: {
-    width: 40,
-    height: 40,
+    wordContainer: {
+    alignItems: 'center',
+    justifyContent: "center",
+    height: 150,
+    flex: 3
+  },
+    statisticsContainer: {
+    alignItems: 'center',
+    justifyContent: "center",
+    height: 150,
+    flex: 1,
+    backgroundColor: '#FCBF2E'
+  },
 
-  },
-  playground: {
-    marginTop: Screen.height <= 500 ? 0 : 80,
-    padding: 20,
-    width: Screen.width - 40,
-    backgroundColor: '#5894f3',
-    alignItems: 'stretch',
-    alignSelf: 'center'
-  },
-  playgroundLabel: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 15
-  },
-  slider: {
-    height: 40
-  }
 });
