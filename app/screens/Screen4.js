@@ -53,26 +53,38 @@ title="Press me"></Button>
 }
 renderFull() {
   return (
-     <View style={{flex: 1, backgroundColor: '#374046', flexDirection: 'column'}}>
-      <View style={styles.wordContainer}><Text>
-            {this.state.sessionWordList[this.state.currentIndex].name1}
+     <View style={{flex: 0.9, backgroundColor: "white", flexDirection: 'column'}}>
+      <View style={styles.statisticsContainer}>
+      <View style={styles.statisticsItemContainer}>
+      <Text>5 for to go</Text></View><View style={styles.statisticsItemContainer}><Text>Completed: 20</Text>
+      </View></View>
+      <View style={styles.wordContainer}>
+      <View>
+      <Text style={{fontSize: 12}}>
+            English:
             </Text>
-      <Text>
+      <Text style={{fontSize: 20}}>
+            {this.state.sessionWordList[this.state.currentIndex].name1}
+            </Text></View>
+            <View>
+      <Text style={{fontSize: 12}}>
+            Vietnamse:
+            </Text> 
+      <Text style={{fontSize: 20}}>
             {this.state.sessionWordList[this.state.currentIndex].name2}
-      </Text>
+      </Text></View>
      </View> 
      <View style={styles.buttonContainer}>
       <View style={styles.button}>
-          <Button color='#dd4b39' onPress={() => {this.setState({renderFull : !this.state.renderFull, currentIndex: this.state.currentIndex + 1})}}
-              title="Yes!">
+          <Button color='lightgreen' onPress={() => {this.setState({renderFull : !this.state.renderFull, currentIndex: this.state.currentIndex + 1})}}
+              title="Got it right!">
           </Button>
       </View>
       <View style={styles.button}>
-          <Button color='#dd4b39'onPress={this.showToastComponent} title="No!">
+          <Button color='#dd4b39'onPress={this.showToastComponent} title="Try again!">
           </Button>      
       </View> 
-     </View> 
-     <View style={styles.statisticsContainer}></View>
+     </View>
     </View>
   )
 }
@@ -96,21 +108,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: "space-around",
     alignItems: 'center',
-    flex: 2,
-    backgroundColor: '#73d4e3',
+    flex: 1,
+    backgroundColor: 'mintcream',
   },
     wordContainer: {
-    alignItems: 'center',
-    justifyContent: "center",
-    height: 150,
-    flex: 3
+    alignItems: 'flex-start',
+    justifyContent: "space-around",
+//    height: 200,
+    flex: 3,
+    borderWidth: 1,
+    borderColor: "grey",
+    borderRadius: 9,
+    paddingLeft: 20
   },
     statisticsContainer: {
     alignItems: 'center',
-    justifyContent: "center",
-    height: 150,
-    flex: 1,
-    backgroundColor: '#FCBF2E'
+    justifyContent: "space-around",
+    flexDirection: 'row',
+    flex: 0.5,
+    backgroundColor: 'mintcream'
+  },
+     statisticsItemContainer: {
+    elevation: 5,
+    backgroundColor: "white",
+    paddingVertical: 10,
+    paddingHorizontal: 10
   },
 
 });
