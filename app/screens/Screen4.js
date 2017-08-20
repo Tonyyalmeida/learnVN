@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert , StyleSheet, Button, View, Text, Animated, TouchableOpacity, Slider, Dimensions, Image} from 'react-native';
+import {Alert , StyleSheet, Button, View, Text, Animated, TouchableOpacity, Slider, Dimensions, Image} from 'react-native';
 import Interactable from 'react-native-interactable';
 
 const Screen = Dimensions.get('window');
@@ -10,6 +10,7 @@ export default class RowActions1 extends Component {
     this.showToastComponent = this.showToastComponent.bind(this)
     this.state = {
       renderFull : true,
+      fadeAnim: new Animated.Value(0),
       sessionWordList:  [
     {id: "1", name1: "Nam", name2: "The Bills"},
     {id: "2", name1: "Paasdsaying", name2: "Zweites Wort"},
@@ -21,8 +22,18 @@ export default class RowActions1 extends Component {
     {id: "9", name1: "JWEJDsn", name2: "The Billsqads"},     
     {id: "10", name1: "Paasdqsaying", name2: "The Bilewlsads"},   
     {id: "11", name1: "Paasdsasying", name2: "Looasjdw"}],
-    currentIndex: 0
+    currentIndex: 0,
+    open: false
     };
+  }
+    componentDidMount() {
+    Animated.timing(                  // Animate over time
+      this.state.fadeAnim,            // The animated value to drive
+      {
+        toValue: 1,                   // Animate to opacity: 1 (opaque)
+        duration: 200000,              // Make it take a while
+      }
+    ).start();                        // Starts the animation
   }
 incrementIndex() {}
 showToastComponent (isRight) {
@@ -37,26 +48,13 @@ this.props.navigator.showSnackbar({
   duration: 'short' // default is `short`. Available options: short, long, indefinite
 });
 }
-
-renderHalf() {
-  return (
-     <View>
-<Text>
-{this.state.sessionWordList[this.state.currentIndex].name1}
-</Text>
-<Button 
-buttonStyle={styles.button}
-onPress={() => {this.setState({renderFull : !this.state.renderFull})}}
-title="Press me"></Button>
-      </View> 
-  )
-}
 renderFull() {
+  let {fadeAnim}  = this.state.fadeAnim;
   return (
      <View style={{flex: 0.9, backgroundColor: "white", flexDirection: 'column'}}>
       <View style={styles.statisticsContainer}>
       <View style={styles.statisticsItemContainer}>
-      <Text>5 for to go</Text></View><View style={styles.statisticsItemContainer}><Text>Completed: 20</Text>
+      <Text>Open: 5</Text></View><View style={styles.statisticsItemContainer}><Text>Completed: 120</Text>
       </View></View>
       <View style={styles.wordContainer}>
       <View>
@@ -66,17 +64,17 @@ renderFull() {
       <Text style={{fontSize: 20}}>
             {this.state.sessionWordList[this.state.currentIndex].name1}
             </Text></View>
-            <View>
-      <Text style={{fontSize: 12}}>
-            Vietnamse:
+            <FadeInView hi={this.state.currentIndex} open={this.state.open}>
+      <Text style={{fontSize: 12, opacity: fadeAnim}}>
+            Vietnamese:
             </Text> 
       <Text style={{fontSize: 20}}>
             {this.state.sessionWordList[this.state.currentIndex].name2}
-      </Text></View>
+      </Text></FadeInView>
      </View> 
      <View style={styles.buttonContainer}>
       <View style={styles.button}>
-          <Button color='lightgreen' onPress={() => {this.setState({renderFull : !this.state.renderFull, currentIndex: this.state.currentIndex + 1})}}
+          <Button color='lightgreen' onPress={() => {this.setState({renderFull : !this.state.renderFull, currentIndex: this.state.currentIndex + 1, open: false})}}
               title="Got it right!">
           </Button>
       </View>
@@ -90,9 +88,7 @@ renderFull() {
 }
 
  render() {
-    if (this.state.renderFull)
-      return this.renderHalf();
-    else { return this.renderFull()}
+ return this.renderFull()
   }}
 
 const styles = StyleSheet.create({
@@ -103,6 +99,7 @@ const styles = StyleSheet.create({
   button: {
     width: 150,
     backgroundColor: '#1EAAF1',
+    elevation: 1
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -116,8 +113,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
 //    height: 200,
     flex: 3,
-    borderWidth: 1,
-    borderColor: "grey",
+//    borderWidth: 1,
+    elevation: 2,
     borderRadius: 9,
     paddingLeft: 20
   },
@@ -136,3 +133,47 @@ const styles = StyleSheet.create({
   },
 
 });
+
+class FadeInView extends React.Component {
+  state = {
+    fadeAnim: new Animated.Value(0),  // Initial value for opacity: 0
+    isOpend: false
+  }
+  componentWillReceiveProps () {
+   this.setState({fadeAnim: new Animated.Value(0), isOpend: this.props.open});
+  }
+  startAnimation() {
+    Animated.timing(                  // Animate over time
+      this.state.fadeAnim,            // The animated value to drive
+      {
+        toValue: 1,                   // Animate to opacity: 1 (opaque)
+        duration: 2000,              // Make it take a while
+      }
+    ).start();                        // Starts the animation
+  }
+ renderClosed() {
+ return(<View><Button onPress={() => {this.setState({isOpend: true}, this.startAnimation())} }title="View all"></Button></View>) 
+ }
+  renderFull() {
+    let { fadeAnim } = this.state;
+    return(
+      <Animated.View                 // Special animatable View
+        style={{
+          ...this.props.style,
+          opacity: fadeAnim,         // Bind opacity to animated value
+        }}
+      >
+      {this.props.children}
+      </Animated.View>
+  )}
+  render() {
+const isOpend = this.state.isOpend;
+if (isOpend)
+{
+return this.renderFull()}
+else
+{
+ return this.renderClosed();
+}
+  }
+}
