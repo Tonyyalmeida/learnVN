@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Alert , StyleSheet, Button, View, Text, Animated, TouchableOpacity, Slider, Dimensions, Image} from 'react-native';
+import {Alert , StyleSheet, Button, View, Text, Animated, TouchableOpacity, Slider, Dimensions, Image, Easing} from 'react-native';
 import Interactable from 'react-native-interactable';
 
 const Screen = Dimensions.get('window');
@@ -10,7 +10,6 @@ export default class RowActions1 extends Component {
     this.showToastComponent = this.showToastComponent.bind(this)
     this.state = {
       renderFull : true,
-      fadeAnim: new Animated.Value(0),
       sessionWordList:  [
     {id: "1", name1: "Nam", name2: "The Bills"},
     {id: "2", name1: "Paasdsaying", name2: "Zweites Wort"},
@@ -23,18 +22,18 @@ export default class RowActions1 extends Component {
     {id: "10", name1: "Paasdqsaying", name2: "The Bilewlsads"},   
     {id: "11", name1: "Paasdsasying", name2: "Looasjdw"}],
     currentIndex: 0,
-    open: false
+    open: true
     };
   }
-    componentDidMount() {
-    Animated.timing(                  // Animate over time
-      this.state.fadeAnim,            // The animated value to drive
-      {
-        toValue: 1,                   // Animate to opacity: 1 (opaque)
-        duration: 200000,              // Make it take a while
-      }
-    ).start();                        // Starts the animation
-  }
+  //   componentDidMount() {
+  //   Animated.timing(                  // Animate over time
+  //     this.state.fadeAnim,            // The animated value to drive
+  //     {
+  //       toValue: 1,                   // Animate to opacity: 1 (opaque)
+  //       duration: 200000,              // Make it take a while
+  //     }
+  //   ).start();                        // Starts the animation
+  // }
 incrementIndex() {}
 showToastComponent (isRight) {
 const text = isRight ? "Correct" : "Wrong";
@@ -49,7 +48,7 @@ this.props.navigator.showSnackbar({
 });
 }
 renderFull() {
-  let {fadeAnim}  = this.state.fadeAnim;
+//  let {fadeAnim}  = this.state.fadeAnim;
   return (
      <View style={{flex: 0.9, backgroundColor: "white", flexDirection: 'column'}}>
       <View style={styles.statisticsContainer}>
@@ -65,7 +64,7 @@ renderFull() {
             {this.state.sessionWordList[this.state.currentIndex].name1}
             </Text></View>
             <FadeInView hi={this.state.currentIndex} open={this.state.open}>
-      <Text style={{fontSize: 12, opacity: fadeAnim}}>
+      <Text style={{fontSize: 12}}>
             Vietnamese:
             </Text> 
       <Text style={{fontSize: 20}}>
@@ -135,32 +134,52 @@ const styles = StyleSheet.create({
 });
 
 class FadeInView extends React.Component {
+  constructor () {
+  super()
+  this.animatedValue = new Animated.Value(0)
+}
   state = {
-    fadeAnim: new Animated.Value(0),  // Initial value for opacity: 0
-    isOpend: false
-  }
-  componentWillReceiveProps () {
-   this.setState({fadeAnim: new Animated.Value(0), isOpend: this.props.open});
-  }
+    fadeAnim: 1,  // Initial value for opacity: 0
+    isOpend: false }
+animate () {
+  this.animatedValue.setValue(0)
+  Animated.timing(
+    this.animatedValue,
+    {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.linear
+    }
+  ).start();
+}
+  // componentWillReceiveProps () {
+  //  this.setState({fadeAnim: new Animated.Value(0), isOpend: this.props.open});
+  // }
   startAnimation() {
     Animated.timing(                  // Animate over time
       this.state.fadeAnim,            // The animated value to drive
       {
         toValue: 1,                   // Animate to opacity: 1 (opaque)
-        duration: 2000,              // Make it take a while
+        duration: 10000,              // Make it take a while
       }
     ).start();                        // Starts the animation
   }
  renderClosed() {
- return(<View><Button onPress={() => {this.setState({isOpend: true}, this.startAnimation())} }title="View all"></Button></View>) 
+ return(<View><Button onPress={() => {this.setState({isOpend: true}, this.animate())} }title="View all"></Button></View>) 
  }
   renderFull() {
-    let { fadeAnim } = this.state;
+  //  let { fadeAnim } = this.state;
+    const marginLeft = this.animatedValue.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [200, 20, 50]
+  });
     return(
       <Animated.View                 // Special animatable View
         style={{
           ...this.props.style,
-          opacity: fadeAnim,         // Bind opacity to animated value
+  //        marginLeft: marginLeft,      // Bind opacity to animated value
+          backgroundColor: 'blue',
+          height: marginLeft
         }}
       >
       {this.props.children}
