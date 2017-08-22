@@ -7,7 +7,8 @@ const Screen = Dimensions.get('window');
 export default class RowActions1 extends Component {
   constructor(props) {
     super(props);
-    this.showToastComponent = this.showToastComponent.bind(this)
+    this.showToastComponent = this.showToastComponent.bind(this);
+    this.open = this.open.bind(this);
     this.state = {
       renderFull : true,
       sessionWordList:  [
@@ -22,8 +23,11 @@ export default class RowActions1 extends Component {
     {id: "10", name1: "Paasdqsaying", name2: "The Bilewlsads"},   
     {id: "11", name1: "Paasdsasying", name2: "Looasjdw"}],
     currentIndex: 0,
-    open: true
+    open: false
     };
+  }
+  open () {
+    this.setState({open: !this.state.open})
   }
   //   componentDidMount() {
   //   Animated.timing(                  // Animate over time
@@ -55,17 +59,20 @@ renderFull() {
       <View style={styles.statisticsItemContainer}>
       <Text>Open: 5</Text></View><View style={styles.statisticsItemContainer}><Text>Completed: 120</Text>
       </View></View>
-      <View style={styles.wordContainer}>
-      <View>
-      <Text style={{fontSize: 12}}>
-            English:
-            </Text>
-      <Text style={{fontSize: 20}}>
-            {this.state.sessionWordList[this.state.currentIndex].name1}
-            </Text></View>
-            <TouchableOpacity onPress={() => console.log("progm")}>
-            <FadeInView></FadeInView></TouchableOpacity>
-     </View> 
+<View style={styles.wordContainer}>
+        <View style={{flex: 1}}>
+            <Text style={{fontSize: 12}}>English:</Text>
+            <Text style={{fontSize: 20}}>{this.state.sessionWordList[this.state.currentIndex].name1}</Text>
+        </View>
+        <View style={{flex: 1}}>
+            <TouchableOpacity activeOpacity={0.9} style={{bottom: 0, position: "absolute", zIndex: 2}} onPress={this.open}>
+               <FadeInView open={this.state.open}></FadeInView>
+            </TouchableOpacity>
+            <Text>{this.state.sessionWordList[this.state.currentIndex].name2}</Text>
+        </View>
+ </View>
+
+
      <View style={styles.buttonContainer}>
       <View style={styles.button}>
           <Button color='lightgreen' onPress={() => {this.setState({renderFull : !this.state.renderFull, currentIndex: this.state.currentIndex + 1, open: false})}}
@@ -110,7 +117,8 @@ const styles = StyleSheet.create({
 //    borderWidth: 1,
     elevation: 2,
     borderRadius: 9,
-    paddingLeft: 20
+    paddingLeft: 20,
+    flexDirection: 'column'
   },
     statisticsContainer: {
     alignItems: 'center',
@@ -136,7 +144,7 @@ class FadeInView extends React.Component {
 }
   state = {
     fadeAnim: 1,  // Initial value for opacity: 0
-    isOpend: false }
+ }
 animate () {
   this.animatedValue.setValue(0)
   Animated.timing(
@@ -148,8 +156,10 @@ animate () {
     }
   ).start();
 }
-  handleOnPress =() => {
-    this.animate
+componentWillReceiveProps = (nextProps) => {
+if (nextProps.open === true) {
+this.animate();
+}
   }
  
   // componentWillReceiveProps () {
@@ -165,29 +175,40 @@ animate () {
     ).start();                        // Starts the animation
   }
  renderClosed() {
- return(<View><Button onPress={() => {this.setState({isOpend: true}, this.animate())} }title="View all"></Button></View>) 
+ return(<View style={{
+          ...this.props.style,
+  //        marginLeft: marginLeft,      // Bind opacity to animated value
+          backgroundColor: 'red',
+          height: 200,
+          width: 200,
+        }}      ></View>) 
  }
   renderFull() {
   //  let { fadeAnim } = this.state;
     const marginLeft = this.animatedValue.interpolate({
     inputRange: [0, 0.5, 1],
-    outputRange: [200, 50, 0]
+    outputRange: [200, 100, 0]
   });
     return(
+      <View>
       <Animated.View style={{
           ...this.props.style,
   //        marginLeft: marginLeft,      // Bind opacity to animated value
-          backgroundColor: 'blue',
-          height: 200,
-          width: marginLeft,
+          backgroundColor: 'red',
+          height: marginLeft,
+          width: 200,
         }}                // Special animatable View
-      ><TouchableOpacity onPress={this.handleOnPress}>
-        <View >
+        >
+        <View>{this.props.children}
         </View>
-      {this.props.children}</TouchableOpacity>
       </Animated.View>
+ </View>
   )}
   render() {
-const isOpend = this.state.isOpend;
-return this.renderFull()}
+const isOpend = this.props.open;
+if (isOpend) {
+return this.renderFull();
+}
+else
+return this.renderClosed()}
 }
