@@ -27,7 +27,8 @@ export default class RowActions1 extends Component {
     };
   }
   open () {
-    this.setState({open: !this.state.open})
+    this.setState({open: !this.state.open});
+    console.log(Screen)
   }
   //   componentDidMount() {
   //   Animated.timing(                  // Animate over time
@@ -57,18 +58,18 @@ renderFull() {
      <View style={{flex: 0.9, backgroundColor: "white", flexDirection: 'column'}}>
       <View style={styles.statisticsContainer}>
       <View style={styles.statisticsItemContainer}>
-      <Text>Open: 5</Text></View><View style={styles.statisticsItemContainer}><Text>Completed: 120</Text>
+      <Text>Open: 5</Text></View><View style={styles.statisticsItemContainer}><Text>Completed: 121</Text>
       </View></View>
 <View style={styles.wordContainer}>
         <View style={{flex: 1}}>
-            <Text style={{fontSize: 12}}>English:</Text>
-            <Text style={{fontSize: 20}}>{this.state.sessionWordList[this.state.currentIndex].name1}</Text>
+            <Text style={{textAlign: "center", fontSize: 12}}>English:</Text>
+            <Text style={{textAlign: "center", fontSize: 20}}>{this.state.sessionWordList[this.state.currentIndex].name1}</Text>
         </View>
-        <View style={{flex: 1}}>
-            <TouchableOpacity activeOpacity={0.9} style={{bottom: 0, position: "absolute", zIndex: 2}} onPress={this.open}>
-               <FadeInView open={this.state.open}></FadeInView>
+        <View style={{flex: 1, flexDirection: 'column'}}>
+            <TouchableOpacity activeOpacity={1} style={{bottom: 20, position: "absolute", zIndex: 2}} onPress={this.open}>
+               <FadeInView handleOpen={this.open} open={this.state.open}></FadeInView>
             </TouchableOpacity>
-            <Text>{this.state.sessionWordList[this.state.currentIndex].name2}</Text>
+            <Text style={{textAlign: "center"}}>Vietnamese: {this.state.sessionWordList[this.state.currentIndex].name2}</Text>
         </View>
  </View>
 
@@ -110,14 +111,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'mintcream',
   },
     wordContainer: {
-    alignItems: 'flex-start',
     justifyContent: "space-around",
+    alignItems: "stretch",
 //    height: 200,
     flex: 3,
 //    borderWidth: 1,
     elevation: 2,
     borderRadius: 9,
     paddingLeft: 20,
+    paddingRight: 20,
     flexDirection: 'column'
   },
     statisticsContainer: {
@@ -151,7 +153,7 @@ animate () {
     this.animatedValue,
     {
       toValue: 1,
-      duration: 1000,
+      duration: 500,
       easing: Easing.linear
     }
   ).start();
@@ -170,7 +172,7 @@ this.animate();
       this.state.fadeAnim,            // The animated value to drive
       {
         toValue: 1,                   // Animate to opacity: 1 (opaque)
-        duration: 10000,              // Make it take a while
+        duration: 2000,              // Make it take a while
       }
     ).start();                        // Starts the animation
   }
@@ -178,25 +180,32 @@ this.animate();
  return(<View style={{
           ...this.props.style,
   //        marginLeft: marginLeft,      // Bind opacity to animated value
-          backgroundColor: 'red',
-          height: 200,
-          width: 200,
-        }}      ></View>) 
+          backgroundColor: 'grey',
+          height: 150,
+          width: Screen.width - 40,
+        }}>
+        <Button title={"Press me to see all"} onPress={ () => this.props.handleOpen()}></Button>
+        </View>) 
  }
   renderFull() {
   //  let { fadeAnim } = this.state;
     const marginLeft = this.animatedValue.interpolate({
     inputRange: [0, 0.5, 1],
-    outputRange: [200, 100, 0]
+    outputRange: [150, 75, 5]
+  });
+  const opacity = this.animatedValue.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [1, 0.7, 0.3]
   });
     return(
       <View>
       <Animated.View style={{
           ...this.props.style,
   //        marginLeft: marginLeft,      // Bind opacity to animated value
-          backgroundColor: 'red',
+          backgroundColor: 'grey',
           height: marginLeft,
-          width: 200,
+          width: Screen.width - 40,
+          opacity: opacity
         }}                // Special animatable View
         >
         <View>{this.props.children}
