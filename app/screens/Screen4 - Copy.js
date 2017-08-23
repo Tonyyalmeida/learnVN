@@ -1,87 +1,59 @@
 import React, { Component } from 'react';
 import {Alert , StyleSheet, Button, View, Text, Animated, TouchableOpacity, Slider, Dimensions, Image, Easing} from 'react-native';
 import Interactable from 'react-native-interactable';
+import { observer, inject } from 'mobx-react/native';
 
 const Screen = Dimensions.get('window');
 
+@inject("studySessionStore") @observer
 export default class RowActions1 extends Component {
   constructor(props) {
     super(props);
-    this.showToastComponent = this.showToastComponent.bind(this);
-    this.open = this.open.bind(this);
     this.state = {
       renderFull : true,
-      sessionWordList:  [
-    {id: "1", name1: "Nam", name2: "The Bills"},
-    {id: "2", name1: "Paasdsaying", name2: "Zweites Wort"},
-    {id: "3", name1: "Paasdqsaying", name2: "The Bilqelsads"},
-    {id: "4", name1: "Paasdqwsaying", name2: "TDirrtesqwewqlsads"},
-    {id: "6", name1: "PaHahasausang", name2: "The Billsads"},
-    {id: "7", name1: "Paasdwesaying", name2: "The Billsweqads"},
-    {id: "8", name1: "Psdsdsdsg", name2: "Lasuhussdfs"},
-    {id: "9", name1: "JWEJDsn", name2: "The Billsqads"},     
-    {id: "10", name1: "Paasdqsaying", name2: "The Bilewlsads"},   
-    {id: "11", name1: "Paasdsasying", name2: "Looasjdw"}],
+      sessionWordList:  [],
     currentIndex: 0,
-    open: false
     };
   }
-  open () {
-    this.setState({open: !this.state.open});
-    console.log(Screen)
-  }
-  //   componentDidMount() {
-  //   Animated.timing(                  // Animate over time
-  //     this.state.fadeAnim,            // The animated value to drive
-  //     {
-  //       toValue: 1,                   // Animate to opacity: 1 (opaque)
-  //       duration: 200000,              // Make it take a while
-  //     }
-  //   ).start();                        // Starts the animation
+  // open () {
+  //   this.setState({open: !this.state.open});
+  //   console.log(Screen)
   // }
+    componentWillMount() {
+this.setState({sessionWordList: this.props.studySessionStore.listing});
+  }
 incrementIndex() {}
-showToastComponent (isRight) {
-const text = isRight ? "Correct" : "Wrong";
-this.props.navigator.showSnackbar({
-  text: text,
-  actionText: '+1', // optional
-  actionId: 'fabClicked', // Mandatory if you've set actionText
-  actionColor: 'green', // optional
-  textColor: 'red', // optional
-  backgroundColor: 'blue', // optional
-  duration: 'short' // default is `short`. Available options: short, long, indefinite
-});
-}
 renderFull() {
 //  let {fadeAnim}  = this.state.fadeAnim;
   return (
      <View style={{flex: 0.9, backgroundColor: "white", flexDirection: 'column'}}>
       <View style={styles.statisticsContainer}>
       <View style={styles.statisticsItemContainer}>
-      <Text>Open: 5</Text></View><View style={styles.statisticsItemContainer}><Text>Completed: 121</Text>
+      <Text>Open: {this.props.studySessionStore.remainingItems}</Text></View><View style={styles.statisticsItemContainer}><Text>Done: {this.props.studySessionStore.doneItems}</Text>
       </View></View>
 <View style={styles.wordContainer}>
         <View style={{flex: 1}}>
             <Text style={{textAlign: "center", fontSize: 12}}>English:</Text>
-            <Text style={{textAlign: "center", fontSize: 20}}>{this.state.sessionWordList[this.state.currentIndex].name1}</Text>
+            <Text style={{textAlign: "center", fontSize: 20}}>{this.props.studySessionStore.listing[this.props.studySessionStore.currentIndex].name1}</Text>
         </View>
         <View style={{flex: 1, flexDirection: 'column'}}>
             <TouchableOpacity activeOpacity={1} style={{bottom: 20, position: "absolute", zIndex: 2}} onPress={this.open}>
-               <FadeInView handleOpen={this.open} open={this.state.open}></FadeInView>
+               <FadeInView open={this.props.studySessionStore.curtainOpen}></FadeInView>
             </TouchableOpacity>
-            <Text style={{textAlign: "center"}}>Vietnamese: {this.state.sessionWordList[this.state.currentIndex].name2}</Text>
+            <Text style={{textAlign: "center", fontSize: 12}}>Vietnamese:</Text>
+            <Text style={{textAlign: "center", fontSize: 20}}>{this.props.studySessionStore.listing[this.props.studySessionStore.currentIndex].name2}</Text>
         </View>
  </View>
 
 
      <View style={styles.buttonContainer}>
       <View style={styles.button}>
-          <Button color='lightgreen' onPress={() => {this.setState({renderFull : !this.state.renderFull, currentIndex: this.state.currentIndex + 1, open: false})}}
+          <Button color='lightgreen' onPress={this.props.studySessionStore.handleDone}
               title="Got it right!">
           </Button>
       </View>
       <View style={styles.button}>
-          <Button color='#dd4b39'onPress={this.showToastComponent} title="Try again!">
+          <Button color='#dd4b39'onPress={this.props.studySessionStore.handleAgain} title="Try again!">
           </Button>      
       </View> 
      </View>
@@ -137,7 +109,7 @@ const styles = StyleSheet.create({
   },
 
 });
-
+@inject("studySessionStore") @observer
 class FadeInView extends React.Component {
   constructor () {
   super()
@@ -153,7 +125,7 @@ animate () {
     this.animatedValue,
     {
       toValue: 1,
-      duration: 500,
+      duration: 200,
       easing: Easing.linear
     }
   ).start();
@@ -180,11 +152,11 @@ this.animate();
  return(<View style={{
           ...this.props.style,
   //        marginLeft: marginLeft,      // Bind opacity to animated value
-          backgroundColor: 'grey',
+          backgroundColor: 'red',
           height: 150,
           width: Screen.width - 40,
         }}>
-        <Button title={"Press me to see all"} onPress={ () => this.props.handleOpen()}></Button>
+        <Button title={"Press me to see all"} onPress={this.props.studySessionStore.toggleAnimationState}></Button>
         </View>) 
  }
   renderFull() {
@@ -202,7 +174,7 @@ this.animate();
       <Animated.View style={{
           ...this.props.style,
   //        marginLeft: marginLeft,      // Bind opacity to animated value
-          backgroundColor: 'grey',
+          backgroundColor: 'green',
           height: marginLeft,
           width: Screen.width - 40,
           opacity: opacity
@@ -214,7 +186,8 @@ this.animate();
  </View>
   )}
   render() {
-const isOpend = this.props.open;
+const isOpend = this.props.studySessionStore.curtainOpen;
+console.log(isOpend)
 if (isOpend) {
 return this.renderFull();
 }

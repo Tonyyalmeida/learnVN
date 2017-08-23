@@ -1,55 +1,49 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 
 class studySessionStore {
 @observable listing = [
-    {id: "1", name1: "Nam", name2: "The Bills"},
-    {id: "2", name1: "Paasdsaying", name2: "Zweites Wort"},
-    {id: "3", name1: "Paasdqsaying", name2: "The Bilqelsads"},
-    {id: "4", name1: "Paasdqwsaying", name2: "TDirrtesqwewqlsads"},
-    {id: "6", name1: "PaHahasausang", name2: "The Billsads"},
-    {id: "7", name1: "Paasdwesaying", name2: "The Billsweqads"},
-    {id: "8", name1: "Psdsdsdsg", name2: "Lasuhussdfs"},
-    {id: "9", name1: "JWEJDsn", name2: "The Billsqads"},     
-    {id: "10", name1: "Paasdqsaying", name2: "The Bilewlsads"},   
-    {id: "11", name1: "Paasdsasying", name2: "Looasjdw"}
+    {id: "1", name1: "Nam", name2: "I'm from the store", status: 0},
+    {id: "2", name1: "Paasdsaying", name2: "Zweites Wort", status: 0},
+    {id: "3", name1: "Paasdqsaying", name2: "The Bilqelsads", status: 0},
+    {id: "4", name1: "Paasdqwsaying", name2: "TDirrtesqwewqlsads", status: 0},
+    {id: "6", name1: "PaHahasausang", name2: "The Billsads", status: 0},
+    {id: "7", name1: "Paasdwesaying", name2: "The Billsweqads", status: 0},
+    {id: "8", name1: "Psdsdsdsg", name2: "Lasuhussdfs",status: 0},
+    {id: "9", name1: "JWEJDsn", name2: "The Billsqads",status: 0},     
+    {id: "10", name1: "Paasdqsaying", name2: "The Bilewlsads", status: 0},   
+    {id: "11", name1: "Paasdsasying", name2: "Looasjdw", status: 0}
     ];
-@action.bound increment (a) {
-  const newState = this.listing.filter( (item) => item.name1 !== a)
-  this.listing = newState;
+@observable curtainOpen = false;
+@observable currentIndex = 0;
+@action.bound toggleAnimationState () {
+this.curtainOpen = !this.curtainOpen
+console.log('hello from the roof')
 }
-@action.bound addNew( newListing) {
-  if(newListing.which === 13)   {
-  this.listing.push(new Listing (newListing.target.value));
-  newListing.target.value = "";
+@action.bound incrementIndex () {
+const newIndex = this.listing.length - this.currentIndex == 1 ? 0 : this.currentIndex + 1;
+this.currentIndex = newIndex;  
 }
+@computed get totalItems() {
+return this.listing.length;
 }
-@observable sessionList = [];
-@action.bound initialLize (a) {
-  const newState = this.listing;
-  this.sessionList = newState; // to be completed (sample)
+@computed get remainingItems() {
+return this.listing.filter((item)=> item.status !== 1).length;
 }
-@action.bound handleDone (wordPairId, isCorrect) 
-{ 
-  const newState = this.sessionList.filter( (item) => item.id !== wordPairId) 
-  this.sessionList = newState; // filter new state
-  this.doneList.push(wordPairId) // construct a new object with right or wrong status
+@computed get doneItems() {
+return this.listing.filter((item)=> item.status !== 0).length;
 }
-@observable doneList = []; // needs to be iniated by API or should it not ? 
-
-
-//checkAddOrRemove (who should carry the state? give it to MobX)
-// Show toast component 
-// Which state should be carried in the component and which in MobX ? 
-};
-
-
-export class Listing {
-  @observable name1;
-  @observable id;
-  constructor(value, id) {
-    this.name1 = value;
-    this.id = id ? id : Date.now();
-  }
+@action.bound handleDone(status) {
+// if wrong, add it to the end, if right, just change it's status
+this.listing[this.currentIndex].status = 1;
+this.incrementIndex();
+this.toggleAnimationState();
+}
+@action.bound handleAgain() {
+this.listing.push(this.listing[this.currentIndex])
+// if wrong, add it to the end, if right, just change it's status
+this.incrementIndex();
+this.toggleAnimationState();
+}
 }
 
 export default studySessionStore;

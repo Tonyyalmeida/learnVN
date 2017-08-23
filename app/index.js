@@ -40,11 +40,11 @@ export default () => {
         title: 'Study',
       },
          {
-        label: 'One Word',
+        label: 'Study 2',
         screen: 'Screen4',
         icon: require('./images/icon1.png'),
         selectedIcon: require('./images/icon2.png'),
-        title: 'Animations',
+        title: 'Study Session',
       },
        {
         label: 'Animations',
