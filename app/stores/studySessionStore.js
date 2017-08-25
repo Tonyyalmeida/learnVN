@@ -20,11 +20,20 @@ this.curtainOpen = !this.curtainOpen
 console.log('hello from the roof')
 }
 @action.bound incrementIndex () {
-const newIndex = this.listing.length - this.currentIndex == 1 ? 0 : this.currentIndex + 1;
-this.currentIndex = newIndex;  
+if (this.listing.length - this.currentIndex !== 1)
+{const newIndex = this.currentIndex + 1;
+this.currentIndex = newIndex; 
+}
+else {
+this.showSuccessScreen();
+}
 }
 @computed get totalItems() {
 return this.listing.length;
+}
+@action.bound showSuccessScreen () {
+//called when incrementIndex length - currentIndex == 1
+console.log("show success screen")    
 }
 @computed get remainingItems() {
 return this.listing.filter((item)=> item.status !== 1).length;
