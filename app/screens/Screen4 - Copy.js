@@ -15,21 +15,16 @@ export default class RowActions1 extends Component {
     currentIndex: 0,
     };
   }
-  // open () {
-  //   this.setState({open: !this.state.open});
-  //   console.log(Screen)
-  // }
     componentWillMount() {
 this.setState({sessionWordList: this.props.studySessionStore.listing});
   }
 incrementIndex() {}
 renderFull() {
-//  let {fadeAnim}  = this.state.fadeAnim;
   return (
      <View style={{flex: 0.9, backgroundColor: "white", flexDirection: 'column'}}>
       <View style={styles.statisticsContainer}>
       <View style={styles.statisticsItemContainer}>
-      <Text>Open: {this.props.studySessionStore.remainingItems}</Text></View><View style={styles.statisticsItemContainer}><Text>Done: {this.props.studySessionStore.doneItems}</Text>
+      <Text style={{fontSize: 14}}>Open: {this.props.studySessionStore.remainingItems}</Text></View><View style={styles.statisticsItemContainer}><Text style={{fontSize: 14}}>Done: {this.props.studySessionStore.doneItems}</Text>
       </View></View>
 <View style={styles.wordContainer}>
         <View style={{flex: 1}}>
@@ -44,8 +39,6 @@ renderFull() {
             <Text style={{textAlign: "center", fontSize: 20}}>{this.props.studySessionStore.listing[this.props.studySessionStore.currentIndex].name2}</Text>
         </View>
  </View>
-
-
      <View style={styles.buttonContainer}>
       <View style={styles.button}>
           <Button color='lightgreen' onPress={this.props.studySessionStore.handleDone}
@@ -60,8 +53,7 @@ renderFull() {
     </View>
   )
 }
-
- render() {
+render() {
  return this.renderFull()
   }}
 
@@ -85,9 +77,7 @@ const styles = StyleSheet.create({
     wordContainer: {
     justifyContent: "space-around",
     alignItems: "stretch",
-//    height: 200,
     flex: 3,
-//    borderWidth: 1,
     elevation: 2,
     borderRadius: 9,
     paddingLeft: 20,
@@ -103,11 +93,9 @@ const styles = StyleSheet.create({
   },
      statisticsItemContainer: {
     elevation: 5,
-    backgroundColor: "white",
     paddingVertical: 10,
     paddingHorizontal: 10
   },
-
 });
 @inject("studySessionStore") @observer
 class FadeInView extends React.Component {

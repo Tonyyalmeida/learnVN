@@ -20,8 +20,13 @@ import {
   AsyncStorage, 
   FlatList,
 } from 'react-native';
-import { Button, List, ListItem, FormLabel, FormInput, Icon } from 'react-native-elements';
+import { Button, List, ListItem, FormLabel, FormInput } from 'react-native-elements';
 import { Provider } from 'mobx-react';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+function ExampleView(props) {
+  return (<Text>Lorem <Icon name="ios-book" color="#4F8EF7" /> Ipsum</Text>);
+}
 
 @inject("generalWordStore") @observer
 class HI extends Component {
@@ -48,6 +53,8 @@ this.props.navigator.push({
 };
 render() {
   return(
+    <View>
+      <ExampleView/>
       <FlatList
       data={this.props.generalWordStore.listing}
       keyExtractor = {(item) => item.id}
@@ -55,7 +62,7 @@ render() {
         ({item}) => (
         <ListItemComponent moreMe={this.handlePress} item={item} key={item.id}/>
         )} 
-      />)}
+      ></FlatList></View>)}
 }
 
 let ListItemComponent = props => {

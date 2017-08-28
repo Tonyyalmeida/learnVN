@@ -12,7 +12,6 @@ export default class RowActions1 extends Component {
  render() {
  return (
    <View style={{flex: 1, backgroundColor: 'gray'}}>
-     
       <View style={{backgroundColor: 'white', height: 200}}></View>
       <View>
       <Text>Hi</Text>
