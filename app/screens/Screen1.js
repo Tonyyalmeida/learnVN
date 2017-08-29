@@ -54,7 +54,6 @@ this.props.navigator.push({
 render() {
   return(
     <View>
-      <ExampleView/>
       <FlatList
       data={this.props.generalWordStore.listing}
       keyExtractor = {(item) => item.id}

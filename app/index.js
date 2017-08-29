@@ -9,18 +9,40 @@ import Screen6 from './screens/Screen6';
 import Provider from './stores/MobxRnnProvider';
 import Store from './stores/index';
 import Icon from "react-native-vector-icons/Ionicons";
-
-
-
+var homeIcon;
+var sessionIcon;
+var fabIcon;
+var galleryIcon;
 export default class App {
-//  const Stores = new Store ();
   constructor() {
-    Icon.getImageSource('ios-settings', 30).then((source) => { settingsIcon = source});
-    Icon.getImageSource('ios-settings-outline', 30).then((source) => { settingsOutlineIcon = source});
-    Icon.getImageSource('ios-people', 30).then((source) => { peopleIcon = source});
-    Icon.getImageSource('ios-navigate-outline', 30).then((source) => { iosNavigateOutline = source});
-    Icon.getImageSource('ios-navigate', 30).then((source) => { iosNavigate = source});
-};
+    this._populateIcons().then(() => {
+      // Start app only if all icons are loaded
+      this.startApp();
+    }).catch((error) => {
+      console.error(error);
+    });
+  } // pattern to call startApp() after polulate is done;
+  _populateIcons = function () {
+    return new Promise(function (resolve, reject) {
+      Promise.all(
+        [
+          Icon.getImageSource('ios-baseball', 30),
+          Icon.getImageSource('ios-cafe', 30),
+          Icon.getImageSource('ios-add', 30),
+          Icon.getImageSource('ios-chatbubbles-outline', 30)
+        ]
+      ).then((values) => {
+        homeIcon = values[0];
+        sessionIcon = values[1];
+        fabIcon = values[2];
+        galleryIcon = values[3];
+        resolve(true);
+      }).catch((error) => {
+        console.log(error);
+        reject(error);
+      }).done();
+    });
+  };
 startApp() {
 
   Navigation.registerComponent('Screen1', () => Screen1, Store, Provider);
@@ -34,20 +56,20 @@ startApp() {
       {
         label: 'Wordlist1a',
         screen: 'Screen1',
-        icon: settingsIcon,
+        icon: homeIcon,
         selectedIcon: require('./images/icon1.png'),
         title: 'Wordlist',
         navigatorButtons: { 
           fab: {
     collapsedId: 'share',
-    collapsedIcon: require('./images/icon1.png'),
+    collapsedIcon: fabIcon,
     backgroundColor: '#607D8B'
   }}
       },
       {
         label: 'Study',
         screen: 'Screen2',
-        icon: require('./images/icon1.png'),
+        icon: sessionIcon,
         selectedIcon: require('./images/icon2.png'),
         title: 'Study',
       },
@@ -61,7 +83,7 @@ startApp() {
        {
         label: 'Animations',
         screen: 'Screen5',
-        icon: require('./images/icon1.png'),
+        icon: galleryIcon,
         selectedIcon: require('./images/icon2.png'),
         title: 'Animations',
       }

@@ -1,4 +1,4 @@
 import App from './app/index';
 
 const app = new App();
-app.startApp();
+app._populateIcons(); // containts startApp as async
