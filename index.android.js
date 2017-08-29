@@ -1,3 +1,4 @@
-import registerApp from './app/index';
+import App from './app/index';
 
-registerApp();
+const app = new App();
+app.startApp();

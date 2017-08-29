@@ -8,9 +8,21 @@ import Screen5 from './screens/Screen5';
 import Screen6 from './screens/Screen6';
 import Provider from './stores/MobxRnnProvider';
 import Store from './stores/index';
+import Icon from "react-native-vector-icons/Ionicons";
 
-export default () => {
+
+
+export default class App {
 //  const Stores = new Store ();
+  constructor() {
+    Icon.getImageSource('ios-settings', 30).then((source) => { settingsIcon = source});
+    Icon.getImageSource('ios-settings-outline', 30).then((source) => { settingsOutlineIcon = source});
+    Icon.getImageSource('ios-people', 30).then((source) => { peopleIcon = source});
+    Icon.getImageSource('ios-navigate-outline', 30).then((source) => { iosNavigateOutline = source});
+    Icon.getImageSource('ios-navigate', 30).then((source) => { iosNavigate = source});
+};
+startApp() {
+
   Navigation.registerComponent('Screen1', () => Screen1, Store, Provider);
   Navigation.registerComponent('Screen2', () => Screen2, Store, Provider);
   Navigation.registerComponent('Screen3', () => Screen3, Store, Provider);
@@ -20,9 +32,9 @@ export default () => {
   Navigation.startTabBasedApp({
     tabs: [
       {
-        label: 'Wordlist',
+        label: 'Wordlist1a',
         screen: 'Screen1',
-        icon: require('./images/icon1.png'),
+        icon: settingsIcon,
         selectedIcon: require('./images/icon1.png'),
         title: 'Wordlist',
         navigatorButtons: { 
@@ -75,5 +87,5 @@ export default () => {
   passProps: {}, // simple serializable object that will pass as props to all top screens (optional)
   animationType: 'slide-down' // optional, add transition animation to root change: 'none', 'slide-down', 'fade'
 });
-
+}
 }

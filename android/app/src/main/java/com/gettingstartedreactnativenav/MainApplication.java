@@ -2,7 +2,7 @@ package com.gettingstartedreactnativenav;
 
 import android.app.Application;
 import android.support.annotation.Nullable;
-
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -47,6 +47,8 @@ public class MainApplication extends NavigationApplication {
   public List<ReactPackage> createAdditionalReactPackages() {
         return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new Interactable()   );
+          new Interactable(),
+          new VectorIconsPackage()
+             );
     }
 }
