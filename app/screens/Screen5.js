@@ -17,7 +17,6 @@ class FadeInView extends React.Component {
 }
 changeIndex() {
 if (this.state.renderWhich == 0) {this.setState({renderWhich: 1}, this.animate())}
-else this.setState({renderWhich: 0}, this.animate())
 }
 animate () {
   this.animatedValue.setValue(0)
@@ -25,23 +24,47 @@ animate () {
     this.animatedValue,
     {
       toValue: 1,
-      duration: 2000,
+      duration: 1000,
       easing: Easing.linear
     }
   ).start(this.changeIndex);
 }
-  render() {
-    const rotateY = this.animatedValue.interpolate({
+render () {
+if (this.state.renderWhich === 0) {return this.renderFirst()}
+else {
+return this.renderSecond()
+}
+}
+  renderFirst() {
+    const hans = this.animatedValue.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: ['0deg', '45deg', '90deg']
-  })
-
+  });
     return (
-      <View style={{height: 50}}>
+      <View>
       <Animated.View                 // Special animatable View
         style={{
           ...this.props.style,
-          transform: [{rotateY}]         // Bind opacity to animated value
+          transform: [{rotateY: hans}]         // Bind opacity to animated value
+        }}
+      >
+        {this.props.children[this.state.renderWhich]}
+      </Animated.View>
+      <Button title={"animate"} onPress={this.animate}></Button>
+      </View>
+    );
+  }
+    renderSecond() {
+     const hans2 = this.animatedValue.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: ['90deg', '135deg', '180deg']
+  });
+    return (
+      <View>
+      <Animated.View                 // Special animatable View
+        style={{
+          ...this.props.style,
+          transform: [{rotateY: hans2}]         // Bind opacity to animated value
         }}
       >
         {this.props.children[this.state.renderWhich]}
@@ -57,7 +80,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <FadeInView style={{width: 250, height: 50, backgroundColor: 'powderblue'}}>
+        <FadeInView style={{backgroundColor: 'powderblue'}}>
           <Image  source={require('../images/icon1_selected.png')}></Image>
           <Image  source={require('../images/icon1.png')}></Image>
         </FadeInView>
